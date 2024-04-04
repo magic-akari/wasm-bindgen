@@ -7,7 +7,7 @@ rust-version = "1.56"
 
 [dependencies]
 anyhow = "1.0.58"
-futures-util = { version = "0.3.21", features = ["sink"] }
+futures-util = { version = "0.3.30", features = ["sink"] }
 hyper = { version = "0.14.20", features = ["server", "tcp", "http1"] }
 mozprofile = "0.8.0"
 mozrunner = "0.14.0"
