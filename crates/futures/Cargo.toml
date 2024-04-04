@@ -15,7 +15,7 @@ rust-version = "1.56"
 cfg-if = "1.0.0"
 js-sys = { path = "../js-sys", version = '0.3.64' }
 wasm-bindgen = { path = "../..", version = '0.2.87' }
-futures-core =  { version = '0.3.8', default-features = false, optional = true }
+futures-core =  { version = '0.3.30', default-features = false, optional = true }
 
 [features]
 futures-core-03-stream = ['futures-core']
