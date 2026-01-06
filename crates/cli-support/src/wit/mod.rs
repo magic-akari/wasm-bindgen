@@ -6,7 +6,6 @@ use crate::transforms::threads::ThreadCount;
 use crate::{decode, wasm_conventions, Bindgen, PLACEHOLDER_MODULE};
 use anyhow::{anyhow, bail, ensure, Error};
 use std::collections::{BTreeSet, HashMap};
-use std::hash::{DefaultHasher, Hash, Hasher};
 use std::str;
 use walrus::ir::VisitorMut;
 use walrus::{ConstExpr, ElementItems, ExportId, FunctionId, ImportId, MemoryId, Module};
@@ -175,17 +174,15 @@ impl<'a> Context<'a> {
             // access to them while processing programs.
             self.descriptors.extend(descriptors);
 
-            for (descriptor, orig_func_ids) in cast_imports {
+            for (idx, (descriptor, orig_func_ids)) in cast_imports.into_iter().enumerate() {
                 let signature = descriptor.unwrap_function();
                 let [arg] = &signature.arguments[..] else {
                     bail!("Cast function must take exactly one argument");
                 };
                 let sig_comment = format!("{arg:?} -> {:?}", &signature.ret);
 
-                // Hash the descriptor string to produce a stable import name.
-                let mut hasher = DefaultHasher::default();
-                sig_comment.hash(&mut hasher);
-                let import_name = format!("__wbindgen_cast_{:016x}", hasher.finish());
+                // Use the sorted index for a deterministic import name.
+                let import_name = format!("__wbindgen_cast_{:016x}", idx + 1);
 
                 // Manufacture an import for this cast.
                 let ty = self.module.funcs.get(orig_func_ids[0]).ty();

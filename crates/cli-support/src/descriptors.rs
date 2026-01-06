@@ -14,13 +14,13 @@ use crate::descriptor::Descriptor;
 use crate::interpreter::Interpreter;
 use anyhow::Error;
 use std::borrow::Cow;
-use std::collections::hash_map::HashMap;
+use std::collections::{BTreeMap, HashMap};
 use walrus::{CustomSection, FunctionId, Module, TypedCustomSectionId};
 
 #[derive(Default, Debug)]
 pub struct WasmBindgenDescriptorsSection {
     pub descriptors: HashMap<String, Descriptor>,
-    pub cast_imports: HashMap<Descriptor, Vec<FunctionId>>,
+    pub cast_imports: BTreeMap<Descriptor, Vec<FunctionId>>,
 }
 
 pub type WasmBindgenDescriptorsSectionId = TypedCustomSectionId<WasmBindgenDescriptorsSection>;
